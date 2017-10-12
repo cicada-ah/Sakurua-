@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"> -->
+	<title>carousel</title>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+	<style>
+	*{
+		margin:0;
+		padding:0;
+}
+
+	.imgdiv{
+		margin:0 auto;
+		overflow:hidden;
+	   	position:relative;
+		width:1100px;
+		height:320px;
+	}
+	.window{
+		position:absolute;
+		width:4400px;
+	}
+	img{
+		float:left;
+		width:1100px;
+		height:320px;
+		display:block;
+	}
+
+	.nav{
+	position:absolute;
+	bottom:10px;
+	right:5px;
+	}
+	.nav a{
+		display: inline-block;
+		padding-left: 5px;
+		border:5px solid;
+		border-color: pink;
+		border-radius: 3px;
+		text-decoration:none;
+		background: orange;
+		color:red;		
+	}
+	.nav a:hover{
+			cursor:pointer;
+		border-color: red!important;
+	}
+	.active{
+		cursor:pointer;
+		border-color: red!important;
+	}
+	</style>
+</head>
+<body>
+<div class="imgdiv">
+<div class="window">
+<a href='#' id='img1' class="img1"><img src="1.jpg" ></a>
+<a href='#' id='img2' class="img2"><img src="2.jpg" ></a>
+<a href='#' id='img3' class="img3"><img src="3.jpg" ></a>
+<a href='#' id='img4' class="img4"><img src="4.jpg" ></a>
+</div>
+<div class='nav'>
+		<a href='#' rel="1"></a>
+		<a href='#' rel="2"></a>
+		<a href='#' rel="3"></a>
+		<a href='#' rel="4"></a>
+</div>
+</div>
+
+<script>
+ $('.nav a:first').addClass('active');//将第一个设置为激活状态
+   carousel = function(){
+ 	val = setInterval(function(){
+ 	activeNext = $('.active').next();
+ 	if(activeNext.length===0){
+ 		activeNext = $('.nav a:first');
+ 	}//第四幅图后归零
+ 	rotate();
+ 	},3000);
+ };//设置定时器，同时获取变量
+
+ rotate = function(){
+ 	var offset=activeNext.attr('rel')-1;
+ 	var image_reelPosition = offset*1100;
+ 	$('.active').removeClass('active');
+ 	activeNext.addClass('active');
+ 	$('.window').animate({left:-image_reelPosition+'px'},600);
+ };//carousel的主体函数，实现a链接和图片的绑定，以及偏移处理
+
+  $('a').click(function(){
+ 	clearInterval(val);
+ 	activeNext=$(this);
+ 	rotate();
+ 	carousel();
+ });
+  $('img').mouseover(function(){
+ 	clearInterval(val);
+ });
+   $('img').mouseout(function(){
+ 	carousel();
+ });
+ carousel();
+</script>
+</body>
+</html>

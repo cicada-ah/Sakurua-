@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"> -->
+	<title>fade-carousel</title>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+	<style>
+	*{
+		margin:0;
+		padding:0;
+	}
+	.imgdiv{
+	position: relative;
+	overflow:hidden;
+	}
+	img{
+		position:absolute;
+		top:0;
+		height:100%;
+		width:100%;	
+	}	
+	</style>
+</head>
+<body>
+<div class="imgdiv">
+<img src="1.jpg" class="img1" >
+<img src="2.jpg" class="img2" >
+<img src="3.jpg" class="img3" >
+</div>
+<script>
+
+$(document).ready(function(){
+	response();//获取初始值
+	$(window).resize(response);
+	setInterval(function(){
+		$('img').eq(2).fadeOut(1000,function(){
+			$(this).show().prependTo('div');
+		});
+},2000);
+		function response(){
+	width=$(this).width();
+	height=width*0.35;
+	$('.imgdiv').css({'width':width,'height':height});
+	}//自响应函数
+});
+</script>
+</body>
+</html>
