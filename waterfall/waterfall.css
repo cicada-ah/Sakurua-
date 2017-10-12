@@ -1,0 +1,25 @@
+*{margin:0;
+padding:0;}
+#main{position:relative;
+margin:0 auto;}
+.box{
+	position:absolute;
+		float:left;
+	padding-left:15px;
+	padding-top:15px;
+		opacity:0;
+}
+.img{
+	border:1px solid gray;
+	border-radius:5px;
+	box-shadow:0px 0px 2px 3px gray;
+	padding:10px;
+			overflow: hidden;
+}
+img{
+	width:165px;
+	height:auto;
+}
+img:hover{
+	-webkit-transform: scale(1.5,1.5); 
+}
