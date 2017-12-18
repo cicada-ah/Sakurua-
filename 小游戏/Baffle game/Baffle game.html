@@ -1,0 +1,151 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<style>
+	#myCanvas{
+		border: 2px solid #ccc;
+	}
+	</style>
+</head>
+<body>
+<canvas id="myCanvas" width=400 height=400></canvas>
+</body>
+<script>
+var log = console.log.bind(console)
+
+var imageFromPath = function(path){
+	var img = new Image()
+	img.src = path
+	return img
+}
+
+
+
+var Paddle = function(path){
+	var image = imageFromPath('paddle.jpg')
+	var o = {
+		img: image,
+		x: 100,
+		y: 250,
+		speed: 15,
+	}
+	o.moveLeft = function() {
+		this.x -= this.speed
+	}
+	o.moveRight = function() {
+		this.x += this.speed
+	}
+	o.collide = function(ball) {
+		if (ball.y + ball.img.height > this.y) {
+			if ( ball.x > this.x && ball.x < this.x + this.img.width){
+				return true
+			}
+		return false
+		}
+	}
+	return o
+}
+var Ball = function(path){
+	var image = imageFromPath('Ball.jpg')
+	var o = {
+		img: image,
+		x: 100,
+		y: 200,
+		speedX: 10,
+		speedY: 10,
+		filed: false,
+	}
+	o.fire = function() {
+		o.fired = true
+	}
+	o.move = function(){
+		if(o.fired){
+			if (o.x< 0 || o.x > 400) {
+				o.speedX = -o.speedX
+			}
+			if (o.y< 0 || o.y > 400) {
+				o.speedY = -o.speedY
+			}
+			o.x += o.speedX
+			o.y += o.speedY
+		}
+	}
+	return o
+}
+// set game
+var guaGame = function(){
+	var g = {
+		actions : {},
+		keydowns : {},
+	}
+	var canvas = document.querySelector('#myCanvas')
+	var ctx = canvas.getContext('2d')
+	g.canvas = canvas
+	g.ctx = ctx	
+	//draw
+	g.drawImage = function(guaImage) {
+		g.ctx.drawImage(guaImage.img, guaImage.x, guaImage.y)		
+	}
+	// evnets
+	window.addEventListener('keydown', function(ev){
+		g.keydowns[ev.key] = true
+	})
+	window.addEventListener('keyup', function(ev){
+		g.keydowns[ev.key] = false
+	})
+
+	g.registerAction = function(key, callback) {
+		g.actions[key] = callback
+	}
+	// set timer
+	setInterval(function(){
+		//events
+		var actions = Object.keys(g.actions)
+		for (var i = 0; i <actions.length; i++) {
+			var key = actions[i]
+			if (g.keydowns[key]){
+				g.actions[key]()
+			}
+		}
+		g.upDate()
+		ctx.clearRect(0, 0, canvas.width, canvas.height)
+		g.draw()
+	}, 1000/30)	
+
+	return g
+}
+
+
+var __main = function(){
+	var game = guaGame()
+	var paddle = Paddle()
+	var ball = Ball()
+	game.registerAction('a', function(){
+		paddle.moveLeft()
+	})
+	
+	game.registerAction('d', function(){
+		paddle.moveRight()
+	})	
+
+	game.registerAction('f', function(){
+		ball.fire()
+	})
+
+	game.upDate  =function() {
+		ball.move()
+		//判断相撞
+		if (paddle.collide(ball)){
+			ball.speedY *= -1
+		}
+	}
+
+	game.draw = function() {
+		game.drawImage(paddle)
+		game.drawImage(ball)
+	}
+}
+__main()
+
+</script>
+</html>
